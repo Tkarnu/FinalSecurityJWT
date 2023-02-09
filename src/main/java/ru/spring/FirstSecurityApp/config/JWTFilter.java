@@ -30,7 +30,7 @@ public class JWTFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         String authHeader = httpServletRequest.getHeader("Authorization");
 
-        if (authHeader != null && authHeader.isBlank() && authHeader.startsWith("Bearer ")) {
+        if (authHeader != null && !authHeader.isBlank() && authHeader.startsWith("Bearer ")) {
             String jwt = authHeader.substring(7);
 
             if (jwt.isBlank()) {
@@ -42,7 +42,8 @@ public class JWTFilter extends OncePerRequestFilter {
                     UserDetails userDetails = personDetailsService.loadUserByUsername(username);
 
                     UsernamePasswordAuthenticationToken authToken =
-                            new UsernamePasswordAuthenticationToken(userDetails.getPassword(),
+                            new UsernamePasswordAuthenticationToken(userDetails,
+                                    userDetails.getPassword(),
                                     userDetails.getAuthorities());
 
                     if (SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -54,6 +55,7 @@ public class JWTFilter extends OncePerRequestFilter {
                 }
             }
         }
+
         filterChain.doFilter(httpServletRequest, httpServletResponse);
     }
 }

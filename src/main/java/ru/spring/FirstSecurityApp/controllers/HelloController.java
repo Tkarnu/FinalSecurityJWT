@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import ru.spring.FirstSecurityApp.security.PersonDetails;
 import ru.spring.FirstSecurityApp.services.AdminService;
 
-
 @Controller
 public class HelloController {
     private final AdminService adminService;
@@ -29,7 +28,6 @@ public class HelloController {
     public String showUserInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
-        System.out.println(personDetails.getPerson());
 
         return personDetails.getUsername();
     }
@@ -40,3 +38,4 @@ public class HelloController {
         return "admin";
     }
 }
+
